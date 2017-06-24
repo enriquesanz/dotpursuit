@@ -8,8 +8,16 @@ public class TimerBar : MonoBehaviour {
 	public float fullTime = 150.0f;
 	public float startingTime = 150.0f; 
 	public Slider Timer;
-	public int currentTarget=0;
+
+	public int currentTrial;
+	public int currentTrialNumOfTargets;
+	public string currentTarget;
+	public int currentTargetNumber;
+
+	public string lastTarget;
+
 	private int numOfTargets;
+	private bool lastRound = false;
 
 	new AudioSource audio;
 	public AudioClip failAudio;
@@ -18,7 +26,8 @@ public class TimerBar : MonoBehaviour {
 	void Start () {
 		audio = GetComponent<AudioSource>();
 		Timer = GetComponent<Slider> ();
-		currentTarget = 0;
+		//currentTarget = 0;
+		SetUpMain setUp = GetComponent<SetUpMain> ();
 	}
 	
 	// Update is called once per frame
@@ -34,11 +43,21 @@ public class TimerBar : MonoBehaviour {
 
 		if (startingTime <= 0)
 		{ 
+			if (lastRound == true) {
+				player.GameOver ();
+			}
+
 			if (currentTarget == player.currentTarget) {
 				if (player.playerEaten == 0) {
+					if ((currentTrialNumOfTargets - 1) == currentTargetNumber) {
+						currentTrial = currentTrial + 1;
+						currentTargetNumber = -1;
+					}
 					audio.PlayOneShot (failAudio);
-					Destroy (GameObject.Find (currentTarget.ToString ()));
-					currentTarget = currentTarget + 1;
+					Destroy (GameObject.Find (currentTarget));
+					//currentTarget = currentTarget + 1;
+					currentTargetNumber = currentTargetNumber + 1;
+					currentTarget = currentTrial.ToString()+"_"+currentTargetNumber.ToString();
 					player.currentTarget = currentTarget;
 					player.playerEaten = 0;
 				} else {
@@ -49,12 +68,15 @@ public class TimerBar : MonoBehaviour {
 				currentTarget = player.currentTarget;
 			}
 				
-			if (currentTarget >= numOfTargets) {
-				player.GameOver ();
-			} else {
-				GameObject.Find(currentTarget.ToString()).GetComponent<Renderer>().enabled = true;
-			}
+			if (currentTarget == lastTarget) {
+				lastRound = true;
+			} 
 
+			if (lastRound == false) {
+				GameObject.Find(currentTarget.ToString()).GetComponent<Renderer>().enabled = true;
+
+			}
+	
 			startingTime = fullTime;
 		}
 			

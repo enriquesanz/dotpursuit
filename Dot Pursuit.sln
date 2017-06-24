@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dot Pursuit", "Assembly-CSh
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dot Pursuit", "Assembly-CSharp-Editor-firstpass.csproj", "{EEE66ECF-4AD8-10D0-4B00-F8B367DA9466}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dot Pursuit", "Assembly-CSharp-Editor.csproj", "{DA425F56-EB97-67BE-3FBD-7412514452C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{EEE66ECF-4AD8-10D0-4B00-F8B367DA9466}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEE66ECF-4AD8-10D0-4B00-F8B367DA9466}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEE66ECF-4AD8-10D0-4B00-F8B367DA9466}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA425F56-EB97-67BE-3FBD-7412514452C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA425F56-EB97-67BE-3FBD-7412514452C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA425F56-EB97-67BE-3FBD-7412514452C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA425F56-EB97-67BE-3FBD-7412514452C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

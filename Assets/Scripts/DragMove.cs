@@ -16,7 +16,12 @@ public class DragMove : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 	public Text countText;
 
 	// To timerBar
-	public int currentTarget = 0;
+	public int currentTrial;
+	public int currentTrialNumOfTargets;
+	public string currentTarget;
+	public int currentTargetNumber;
+	public string lastTarget;
+
 	public int playerEaten = 0;
 
 	// Explosion
@@ -38,6 +43,7 @@ public class DragMove : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
 	// Use this for initialization
 	void Start () {
+		SetUpMain setUp = GetComponent<SetUpMain> ();
 		audio = GetComponent<AudioSource>();
 		count = 0;
 		SetCountText ();
@@ -77,7 +83,7 @@ public class DragMove : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
 	void OnCollisionEnter2D(Collision2D coll) {
 
-		if (coll.gameObject.name == currentTarget.ToString())
+		if (coll.gameObject.name == currentTarget)
 		{
 			//Collision target = GameObject.Find (coll.gameObject.name).GetComponent<Collision> ();
 			TimerBar timebar = GameObject.Find ("TimerBar").GetComponent<TimerBar> ();
@@ -92,9 +98,15 @@ public class DragMove : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 			explosionAnimation.Find("ExpAnimator").Find("Fire").gameObject.GetComponent<Renderer>().sortingLayerName = "Item";
 
 
+
 			if (timebar.currentTarget == currentTarget) {
+				if (currentTrialNumOfTargets == currentTargetNumber) {
+					currentTrial = currentTrial + 1;
+					currentTargetNumber = 0;
+				}
 				playerEaten = playerEaten + 1;
-				currentTarget = currentTarget + 1;
+				currentTargetNumber = currentTargetNumber + 1;
+				currentTarget = currentTrial + "-" + currentTargetNumber.ToString ();
 				timebar.currentTarget = currentTarget;
 			}
 
