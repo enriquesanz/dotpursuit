@@ -43,7 +43,6 @@ public class DragMove : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
 	// Use this for initialization
 	void Start () {
-		SetUpMain setUp = GetComponent<SetUpMain> ();
 		audio = GetComponent<AudioSource>();
 		count = 0;
 		SetCountText ();
@@ -106,7 +105,7 @@ public class DragMove : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 				}
 				playerEaten = playerEaten + 1;
 				currentTargetNumber = currentTargetNumber + 1;
-				currentTarget = currentTrial + "-" + currentTargetNumber.ToString ();
+				currentTarget = currentTrial + "_" + currentTargetNumber.ToString ();
 				timebar.currentTarget = currentTarget;
 			}
 
