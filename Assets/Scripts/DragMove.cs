@@ -2,6 +2,9 @@
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Linq;
+using System.Collections.Generic;
+using System;
 
 // Player Script
 
@@ -21,6 +24,8 @@ public class DragMove : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 	public string currentTarget;
 	public int currentTargetNumber;
 	public string lastTarget;
+
+	public List<string> listOfPossibleTargets = new List<string>();
 
 	public int playerEaten = 0;
 
@@ -46,6 +51,7 @@ public class DragMove : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 		audio = GetComponent<AudioSource>();
 		count = 0;
 		SetCountText ();
+		listOfPossibleTargets.Add ("1_0");
 
 	}
 
@@ -82,7 +88,13 @@ public class DragMove : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
 	void OnCollisionEnter2D(Collision2D coll) {
 
-		if (coll.gameObject.name == currentTarget)
+		int pos = listOfPossibleTargets.IndexOf(currentTarget);
+		bool check = listOfPossibleTargets.Contains (currentTarget);
+		print ("currentTarget->" + coll.gameObject.name);
+		print ("Existe->" + check);
+		print ("Pos->" + pos);
+//		if (coll.gameObject.name == currentTarget)
+		if (listOfPossibleTargets.Contains (coll.gameObject.name) == true)
 		{
 			//Collision target = GameObject.Find (coll.gameObject.name).GetComponent<Collision> ();
 			TimerBar timebar = GameObject.Find ("TimerBar").GetComponent<TimerBar> ();
@@ -98,17 +110,20 @@ public class DragMove : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
 
 
-			if (timebar.currentTarget == currentTarget) {
-				if (currentTrialNumOfTargets == currentTargetNumber) {
-					currentTrial = currentTrial + 1;
-					currentTargetNumber = 0;
-				}
-				playerEaten = playerEaten + 1;
-				currentTargetNumber = currentTargetNumber + 1;
-				currentTarget = currentTrial + "_" + currentTargetNumber.ToString ();
-				timebar.currentTarget = currentTarget;
-			}
+//			if (timebar.currentTarget == currentTarget) {
+//				if (currentTrialNumOfTargets == currentTargetNumber) {
+//					currentTrial = currentTrial + 1;
+//					currentTargetNumber = 0;
+//				}
+//				playerEaten = playerEaten + 1;
+//				currentTargetNumber = currentTargetNumber + 1;
+//				currentTarget = currentTrial + "_" + currentTargetNumber.ToString ();
+//				timebar.currentTarget = currentTarget;
+//			}
 
+			timebar.DestroyFullTrial (currentTrialNumOfTargets, currentTrial);
+			currentTrial = currentTrial + 1;
+			currentTargetNumber = 0;
 
 			// Score
 			count = count + 1;

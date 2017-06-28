@@ -14,14 +14,19 @@ public class SetUpMain : MonoBehaviour {
 	public int nTrial;
 	public int nTrialNumOfTargets;
 	public string lastTarget;
+	public int lastTrial;
 
+
+	public List<float> trialTime = new List<float> ();
+	float totalTime;
 
 	// List of targets DEPECRATED
 	List<Target> targetList = new List<Target>();
 	List<Target> targetList2 = new List<Target>();
 
 	// List of trials NEW
-	List<Trial> trialList = new List<Trial>();
+	public List<Trial> trialList = new List<Trial>();
+
 
 
 	// Use this for initialization
@@ -38,6 +43,7 @@ public class SetUpMain : MonoBehaviour {
 		timerBar.currentTrial = nTrial;
 		timerBar.currentTrialNumOfTargets = nTrialNumOfTargets;
 		timerBar.lastTarget = lastTarget;
+		timerBar.lastTrial = lastTrial;
 
 	}
 	
@@ -53,8 +59,9 @@ public class SetUpMain : MonoBehaviour {
 	{
 		Destroy (GameObject.Find ("Target"));
 
-		Debug.Log ("Empezando");
+		//Debug.Log ("Empezando");
 	
+		// Create all targets for all trials
 		for (int t = 0; t < trialList.Count; t++) {
 
 			for (int i = 0; i < trialList[t].trialTargets.Count; i++) {
@@ -63,16 +70,21 @@ public class SetUpMain : MonoBehaviour {
 				myTargetInstance.transform.position = GeneratedPosition (t,i);
 				myTargetInstance.name = trialList [t].nTrial.ToString() + '_'+ i.ToString();
 				listOfTargets.Add (myTargetInstance.name);
-				if (i != 0) {
-					myTargetInstance.GetComponent<Renderer>().enabled = false;
-				}
+				myTargetInstance.GetComponent<Renderer>().enabled = false;
+				totalTime = totalTime + trialList [t].trialTargets [i].time;
 			}
-
+			trialTime.Add (totalTime);
+			totalTime = 0;
 		}
 
 		nTrial = trialList [0].nTrial;
 		nTrialNumOfTargets = trialList [0].trialTargets.Count;
 		lastTarget = trialList.Last().nTrial.ToString() + "_" + (trialList.Last().trialTargets.Count - 1);// + trialList[trialList.Count].trialTargets[trialList[trialList.Count].trialTargets.Count]
+		lastTrial = trialList.Last().nTrial;
+
+		timerBar.startingTime = trialList [0].trialTargets [0].time;
+		timerBar.fullTime = trialList [0].trialTargets [0].time;
+
 
 	}
 
@@ -87,15 +99,15 @@ public class SetUpMain : MonoBehaviour {
 
 	void setUpList()
 	{
-		targetList.Add (new Target() {x = 6.00f, y = 2.75f, z = 0f, time = 1});
-		targetList.Add (new Target() {x = 5.75f, y = -2.12f, z = 0f, time = 154});
-		targetList.Add (new Target() {x = 0.41f, y = -2.63f, z = 0f, time = 784});
-		targetList.Add (new Target() {x = -7.29f, y = 2.85f, z = 0f, time = 867});
+		targetList.Add (new Target() {x = 6.00f, y = 2.75f, z = 0f, time = 1.0f});
+		targetList.Add (new Target() {x = 5.75f, y = -2.12f, z = 0f, time = 154.0f});
+		targetList.Add (new Target() {x = 0.41f, y = -2.63f, z = 0f, time = 784.0f});
+		targetList.Add (new Target() {x = -7.29f, y = 2.85f, z = 0f, time = 867.0f});
 
-		targetList2.Add (new Target() {x = 6.00f, y = 2.75f, z = 0f, time = 1});
-		targetList2.Add (new Target() {x = 5.75f, y = -2.12f, z = 0f, time = 154});
-		targetList2.Add (new Target() {x = 0.41f, y = -2.63f, z = 0f, time = 784});
-		targetList2.Add (new Target() {x = -7.29f, y = 2.85f, z = 0f, time = 867});
+		targetList2.Add (new Target() {x = 7.00f, y = 2.75f, z = 0f, time = 1.0f});
+		targetList2.Add (new Target() {x = 6.75f, y = -2.12f, z = 0f, time = 154.0f});
+		targetList2.Add (new Target() {x = 1.41f, y = -2.63f, z = 0f, time = 784.0f});
+		targetList2.Add (new Target() {x = -8.29f, y = 2.85f, z = 0f, time = 867.0f});
 
 		trialList.Add (new Trial () { nTrial = 1, trialType = 4, trialTargets = targetList});
 		trialList.Add (new Trial () { nTrial = 2, trialType = 1, trialTargets = targetList2});
