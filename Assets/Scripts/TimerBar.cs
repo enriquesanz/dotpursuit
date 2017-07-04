@@ -9,16 +9,20 @@ public class TimerBar : MonoBehaviour {
 	public float startingTime;// = 150.0f; 
 	public Slider Timer;
 
+	public bool paused = false;
+
 	public int currentTrial;
 	public int currentTrialNumOfTargets;
 	public string currentTarget;
 	public int currentTargetNumber;
+	public string currentTrialLastTarget;
 
 	public string lastTarget;
 	public int lastTrial;
 
 	private int numOfTargets;
 	private bool lastRound = false;
+	public bool endingTrial = false;
 
 	new AudioSource audio;
 	public AudioClip failAudio;
@@ -32,76 +36,82 @@ public class TimerBar : MonoBehaviour {
 		//currentTarget = 0;
 		fullTime = setUp.trialList[0].trialTargets[0].time;
 		startingTime = setUp.trialList[0].trialTargets[0].time;
-		Debug.Log ("Starting tim2"+startingTime);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		numOfTargets = GameObject.Find("BackGround").GetComponent<SetUpMain>().numOfTargets;
 
-		//currentTarget = player.GetComponent <currentTarget>();
 		DragMove player = GameObject.Find("Player").GetComponent<DragMove>();
-		//currentTarget = player.currentTarget;
 
-		startingTime -= Time.deltaTime * 600;
-		Timer.value = startingTime;
+		currentTrialLastTarget = currentTrial.ToString () + "_" + (currentTrialNumOfTargets - 1).ToString();
 
-		if (startingTime <= 0)
-		{ 
-			if (lastRound == true) {
-				player.GameOver ();
-			}
+		if (paused == false) {
+			startingTime -= Time.deltaTime * 600;
+			Timer.value = startingTime;
 
-			// Check if currentTargete is the last of the trial
-			if (currentTarget == player.currentTrial.ToString() + "_" + (player.currentTrialNumOfTargets - 1)) {
-				print ("Destroy trial");
-//				for (int t = 0; t < (player.currentTrialNumOfTargets); t++) {
-//					Destroy (GameObject.Find (player.currentTrial.ToString() + "_" + t));
-//				}
-				DestroyFullTrial(player.currentTrialNumOfTargets, player.currentTrial);
-			}
+			// Esto se ejecuta cuando el contador de la barra de tiempo llega a 0
+			if (startingTime <= 0)
+			{ 
 
-
-			if (currentTarget == player.currentTarget) {
-				if (player.playerEaten == 0) {
-					if ((currentTrialNumOfTargets - 1) == currentTargetNumber) {
-						currentTrial = currentTrial + 1;
-						currentTargetNumber = -1;
-					}
-					audio.PlayOneShot (failAudio);
-					//Destroy (GameObject.Find (currentTarget));
-					//currentTarget = currentTarget + 1;
-					currentTargetNumber = currentTargetNumber + 1;
-					currentTarget = currentTrial.ToString()+"_"+currentTargetNumber.ToString();
-					player.currentTarget = currentTarget;
-					player.playerEaten = 0;
-				} else {
-					player.playerEaten = 0;
+				if (lastRound == true) {
+					player.GameOver ();
 				}
 
-			} else {
-				currentTarget = player.currentTarget;
+				if (endingTrial == true) {
+					print ("Destroy trial");
+					//DestroyFullTrial (currentTrialNumOfTargets, currentTrial);
+					for (int t = 0; t < (currentTrialNumOfTargets); t++) {
+						print ("Quitando" + currentTrial.ToString () + "_" + t);
+						Destroy (GameObject.Find (currentTrial.ToString() + "_" + t));
+					}
+
+					endingTrial = false;
+					//print ("Current Trial antes->" + currentTrial);
+					currentTrial = currentTrial + 1;
+					currentTargetNumber = 0;
+					currentTarget = currentTrial.ToString () + "_0";
+					currentTrialNumOfTargets = setUp.trialList [currentTrial - 1].trialTargets.Count;
+					currentTrialLastTarget = currentTrial.ToString () + "_" + currentTrialNumOfTargets;
+					fullTime = setUp.trialList [currentTrial - 1].trialTargets [0].time;
+
+					//print ("Last trial->" + lastTrial);
+
+					if (currentTrial > lastTrial) {
+						lastRound = true;
+					}
+
+				} else {
+					if (currentTrial > lastTrial) {
+						player.GameOver ();
+					}
+
+					// Check if currentTargete is the last of the trial
+					if (currentTarget == currentTrialLastTarget) {
+						endingTrial = true;
+					}
+
+					if (lastRound == false) {
+						print ("Activando->" + currentTarget.ToString ());
+						GameObject.Find(currentTarget.ToString()).GetComponent<Renderer>().enabled = true;
+						player.listOfPossibleTargets.Add (currentTarget.ToString ());
+
+					}
+
+					if (currentTargetNumber == 0) {
+						paused = true;
+					} else {
+						currentTargetNumber = currentTargetNumber + 1;
+						currentTarget = currentTrial.ToString()+"_"+currentTargetNumber.ToString();
+
+					}
+
+					fullTime = setUp.trialList [currentTrial - 1].trialTargets [currentTargetNumber -1].time;
+
+					startingTime = fullTime;
+				}
 			}
-				
+		} //paused
 
-			if (lastRound == false) {
-				print ("Activando->" + currentTarget.ToString ());
-				GameObject.Find(currentTarget.ToString()).GetComponent<Renderer>().enabled = true;
-				player.listOfPossibleTargets.Add (currentTarget.ToString ());
-
-			}
-
-			if (currentTarget == lastTarget) {
-				lastRound = true;
-			} 
-
-			fullTime = setUp.trialList [currentTrial - 1].trialTargets [currentTargetNumber].time;
-
-			print ("Tiempo->" + fullTime);
-
-			startingTime = fullTime;
-		}
-			
 	}
 
 	public void DestroyFullTrial(int currentTrialNumOfTargets, int currentTrial)
@@ -112,13 +122,19 @@ public class TimerBar : MonoBehaviour {
 			Destroy (GameObject.Find (currentTrial.ToString() + "_" + t));
 		}
 
-		//print ("Current Trial antes->" + currentTrial);
-		currentTrial = currentTrial + 1;
-
-		//print ("Last trial->" + lastTrial);
-		if (currentTrial > lastTrial) {
-			lastRound = true;
-		}
+//		endingTrial = false;
+//		//print ("Current Trial antes->" + currentTrial);
+//		this.currentTrial = currentTrial + 1;
+//		currentTargetNumber = 0;
+//		currentTarget = currentTrial.ToString () + "_0";
+//		currentTrialNumOfTargets = setUp.trialList [currentTrial - 1].trialTargets.Count;
+//		currentTrialLastTarget = currentTrial.ToString () + "_" + currentTrialNumOfTargets;
+//		fullTime = setUp.trialList [currentTrial - 1].trialTargets [0].time;
+//
+//		//print ("Last trial->" + lastTrial);
+//		if (currentTrial > lastTrial) {
+//			lastRound = true;
+//		}
 	}
 
 }

@@ -14,6 +14,8 @@ public class DragMove : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 	new AudioSource audio;
 	public AudioClip audioCollission;
 
+	public SetUpMain setUp;
+
 	// Score
 	private int count;
 	public Text countText;
@@ -108,23 +110,26 @@ public class DragMove : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 			explosionAnimation.transform.position = coll.gameObject.transform.position;
 			explosionAnimation.Find("ExpAnimator").Find("Fire").gameObject.GetComponent<Renderer>().sortingLayerName = "Item";
 
+			if (timebar.paused == false) {
+				timebar.DestroyFullTrial (currentTrialNumOfTargets, currentTrial);
+				currentTrial = currentTrial + 1;
+//				timebar.currentTargetNumber = 0;
 
+				timebar.endingTrial = false;
+				//print ("Current Trial antes->" + currentTrial);
+				timebar.currentTrial = timebar.currentTrial + 1;
+				timebar.currentTargetNumber = 0;
+				timebar.currentTarget = timebar.currentTrial.ToString () + "_0";
+				timebar.currentTrialNumOfTargets = setUp.trialList [currentTrial - 1].trialTargets.Count;
+				timebar.currentTrialLastTarget = timebar.currentTrial.ToString () + "_" + timebar.currentTrialNumOfTargets;
+				timebar.fullTime = setUp.trialList [currentTrial - 1].trialTargets [0].time;
 
-//			if (timebar.currentTarget == currentTarget) {
-//				if (currentTrialNumOfTargets == currentTargetNumber) {
-//					currentTrial = currentTrial + 1;
-//					currentTargetNumber = 0;
-//				}
-//				playerEaten = playerEaten + 1;
-//				currentTargetNumber = currentTargetNumber + 1;
-//				currentTarget = currentTrial + "_" + currentTargetNumber.ToString ();
-//				timebar.currentTarget = currentTarget;
-//			}
-
-			timebar.DestroyFullTrial (currentTrialNumOfTargets, currentTrial);
-			currentTrial = currentTrial + 1;
-			currentTargetNumber = 0;
-
+			} else {
+				timebar.paused = false;
+				timebar.currentTargetNumber = timebar.currentTargetNumber + 1;
+				timebar.currentTarget = timebar.currentTrial.ToString()+"_"+timebar.currentTargetNumber.ToString();
+			}	
+				
 			// Score
 			count = count + 1;
 			SetCountText ();

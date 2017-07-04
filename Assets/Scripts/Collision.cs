@@ -9,6 +9,8 @@ public class Collision : MonoBehaviour {
 	public int position;
 	public bool isEnabled = true;
 
+	void Start () {
+	}
 
 	// Update is called once per frame
 	void Update () {
@@ -18,6 +20,14 @@ public class Collision : MonoBehaviour {
 	}
 
 	void OnCollisionEnter2D(Collision2D coll) {
+		TimerBar timebar = GameObject.Find ("TimerBar").GetComponent<TimerBar> ();
+		//DragMove player = GameObject.Find("Player").GetComponent<DragMove>();
+
+		//timebar.paused = false;
+
+//		if (coll.gameObject.name == "1_1") {
+//			timebar.DestroyFullTrial(player.currentTrialNumOfTargets, player.currentTrial);
+//		}
 		//Debug.Log ("Collision " + coll.gameObject.name);
 		//Instantiate (explosion, position);
 	
