@@ -23,14 +23,18 @@ public class SetUpMain : MonoBehaviour {
 	// List of targets DEPECRATED
 	List<Target> targetList = new List<Target>();
 	List<Target> targetList2 = new List<Target>();
+	List<Target> targetList3 = new List<Target>();
 
 	// List of trials NEW
 	public List<Trial> trialList = new List<Trial>();
+
+	private Camera camera;
 
 
 
 	// Use this for initialization
 	void Start () {
+		Screen.SetResolution (1920, 960, true);
 		setUpList ();
 		numOfTargets = targetList.Count;
 		manageItems ();
@@ -45,10 +49,15 @@ public class SetUpMain : MonoBehaviour {
 		timerBar.lastTarget = lastTarget;
 		timerBar.lastTrial = lastTrial;
 
+		// Posicionar
+		camera = GetComponent<Camera>();
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
+
+
 		if (player.gameOver == true && Input.GetMouseButtonDown(0))
 		{
 			SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex);
@@ -72,6 +81,10 @@ public class SetUpMain : MonoBehaviour {
 				listOfTargets.Add (myTargetInstance.name);
 				myTargetInstance.GetComponent<Renderer>().enabled = false;
 				totalTime = totalTime + trialList [t].trialTargets [i].time;
+
+				Vector3 screenPos = camera.WorldToScreenPoint(GeneratedPosition (t,i));
+				Debug.Log("target is " + screenPos.x + " pixels from the left");
+
 			}
 			trialTime.Add (totalTime);
 			totalTime = 0;
@@ -109,8 +122,20 @@ public class SetUpMain : MonoBehaviour {
 		targetList2.Add (new Target() {x = 1.41f, y = -2.63f, z = 0f, time = 784.0f});
 		targetList2.Add (new Target() {x = -8.29f, y = 2.85f, z = 0f, time = 867.0f});
 
+		targetList3.Add (new Target() {x = 5.00f, y = 3.00f, z = 0f, time = 1.0f});
+		targetList3.Add (new Target() {x = 3.75f, y = -4.12f, z = 0f, time = 154.0f});
+		targetList3.Add (new Target() {x = 4.41f, y = -3.63f, z = 0f, time = 784.0f});
+
+
 		trialList.Add (new Trial () { nTrial = 1, trialType = 4, trialTargets = targetList});
 		trialList.Add (new Trial () { nTrial = 2, trialType = 1, trialTargets = targetList2});
+		trialList.Add (new Trial () { nTrial = 3, trialType = 1, trialTargets = targetList3});
+		trialList.Add (new Trial () { nTrial = 4, trialType = 3, trialTargets = targetList3});
+
+//		1,4,1203,441,1,607,419,154,911,155,784,896,705,867
+//		2,1,607,415,1,1206,475,231,NaN,NaN,776,NaN,NaN,869
+//		3,1,607,465,1,1206,425,203,NaN,NaN,836,NaN,NaN,827
+//		4,3,1258,423,1,658,468,194,NaN,NaN,733,NaN,NaN,711
 
 	}
 
