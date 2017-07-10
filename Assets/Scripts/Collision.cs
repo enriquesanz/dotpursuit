@@ -20,7 +20,7 @@ public class Collision : MonoBehaviour {
 	}
 
 	void OnCollisionEnter2D(Collision2D coll) {
-		TimerBar timebar = GameObject.Find ("TimerBar").GetComponent<TimerBar> ();
+		//TimerBar timebar = GameObject.Find ("TimerBar").GetComponent<TimerBar> ();
 		//DragMove player = GameObject.Find("Player").GetComponent<DragMove>();
 
 		//timebar.paused = false;

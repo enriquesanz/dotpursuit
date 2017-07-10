@@ -82,9 +82,6 @@ public class SetUpMain : MonoBehaviour {
 				myTargetInstance.GetComponent<Renderer>().enabled = false;
 				totalTime = totalTime + trialList [t].trialTargets [i].time;
 
-				Vector3 screenPos = camera.WorldToScreenPoint(GeneratedPosition (t,i));
-				Debug.Log("target is " + screenPos.x + " pixels from the left");
-
 			}
 			trialTime.Add (totalTime);
 			totalTime = 0;
@@ -112,30 +109,74 @@ public class SetUpMain : MonoBehaviour {
 
 	void setUpList()
 	{
-		targetList.Add (new Target() {x = 6.00f, y = 2.75f, z = 0f, time = 1.0f});
-		targetList.Add (new Target() {x = 5.75f, y = -2.12f, z = 0f, time = 154.0f});
-		targetList.Add (new Target() {x = 0.41f, y = -2.63f, z = 0f, time = 784.0f});
-		targetList.Add (new Target() {x = -7.29f, y = 2.85f, z = 0f, time = 867.0f});
 
-		targetList2.Add (new Target() {x = 7.00f, y = 2.75f, z = 0f, time = 1.0f});
-		targetList2.Add (new Target() {x = 6.75f, y = -2.12f, z = 0f, time = 154.0f});
-		targetList2.Add (new Target() {x = 1.41f, y = -2.63f, z = 0f, time = 784.0f});
-		targetList2.Add (new Target() {x = -8.29f, y = 2.85f, z = 0f, time = 867.0f});
+		targetList.Add (new Target() {x = -7.50f, y = -7f, z = 0f, time = 1f});
+		targetList.Add (new Target() {x = 5.50f, y = 0f, z = 0f, time = 198f});
+		targetList.Add (new Target() {x = -1f, y = -1.45f, z = 0f, time = 758f});
+		targetList.Add (new Target() {x = -7f, y = 6.50f, z = 0f, time = 794f});
+		trialList.Add (new Trial () { nTrial = 1, trialType = 2, trialTargets = targetList});
+		targetList = new List<Target>();
+		targetList.Add (new Target() {x = 5.0f, y = -6f, z = 0f, time = 1f});
+		targetList.Add (new Target() {x = -1.35f, y = 1f, z = 0f, time = 176f});
+		targetList.Add (new Target() {x = -4f, y = -7.50f, z = 0f, time = 863f});
+		targetList.Add (new Target() {x = -1f, y = 7.50f, z = 0f, time = 835f});
+		trialList.Add (new Trial () { nTrial = 2, trialType = 4, trialTargets = targetList});
+		targetList = new List<Target>();
+		targetList.Add (new Target() {x = 7.50f, y = 1f, z = 0f, time = 1f});
+		targetList.Add (new Target() {x = -5.50f, y = -7f, z = 0f, time = 226f});
+		trialList.Add (new Trial () { nTrial = 3, trialType = 3, trialTargets = targetList});
+		targetList = new List<Target>();
+		targetList.Add (new Target() {x = -1.25f, y = -7f, z = 0f, time = 1f});
+		targetList.Add (new Target() {x = 5.50f, y = 0f, z = 0f, time = 225f});
+		targetList.Add (new Target() {x = -6f, y = -1.45f, z = 0f, time = 762f});
+		targetList.Add (new Target() {x = -2f, y = 1.50f, z = 0f, time = 783f});
+		trialList.Add (new Trial () { nTrial = 4, trialType = 2, trialTargets = targetList});
+		targetList = new List<Target>();
+		targetList.Add (new Target() {x = -7.50f, y = -7f, z = 0f, time = 1f});
+		targetList.Add (new Target() {x = 5.50f, y = 0f, z = 0f, time = 204f});
+		targetList.Add (new Target() {x = -1f, y = -9.50f, z = 0f, time = 817f});
+		targetList.Add (new Target() {x = -7f, y = 1.50f, z = 0f, time = 810f});
+		trialList.Add (new Trial () { nTrial = 5, trialType = 2, trialTargets = targetList});
+		targetList = new List<Target>();
+		targetList.Add (new Target() {x = -1.45f, y = -2f, z = 0f, time = 1f});
+		targetList.Add (new Target() {x = 7.50f, y = -8f, z = 0f, time = 195f});
+		trialList.Add (new Trial () { nTrial = 6, trialType = 1, trialTargets = targetList});
+		targetList = new List<Target>();
+		targetList.Add (new Target() {x = -9.50f, y = -2f, z = 0f, time = 1f});
+		targetList.Add (new Target() {x = 7.50f, y = -3f, z = 0f, time = 198f});
+		trialList.Add (new Trial () { nTrial = 7, trialType = 1, trialTargets = targetList});
+		targetList = new List<Target>();
+		targetList.Add (new Target() {x = -7.50f, y = -2f, z = 0f, time = 1f});
+		targetList.Add (new Target() {x = 5.50f, y = -5f, z = 0f, time = 167f});
+		targetList.Add (new Target() {x = -1f, y = -1.45f, z = 0f, time = 845f});
+		targetList.Add (new Target() {x = -2f, y = 1.50f, z = 0f, time = 880f});
+		trialList.Add (new Trial () { nTrial = 8, trialType = 2, trialTargets = targetList});
+		targetList = new List<Target>();
+		targetList.Add (new Target() {x = 0f, y = -6.50f, z = 0f, time = 1f});
+		targetList.Add (new Target() {x = -8f, y = 5.50f, z = 0f, time = 180f});
+		trialList.Add (new Trial () { nTrial = 9, trialType = 5, trialTargets = targetList});
+		targetList = new List<Target>();
+		targetList.Add (new Target() {x = 2.50f, y = -4f, z = 0f, time = 1f});
+		targetList.Add (new Target() {x = -1.05f, y = -2f, z = 0f, time = 220f});
+		trialList.Add (new Trial () { nTrial = 10, trialType = 3, trialTargets = targetList});
+		targetList = new List<Target>();
 
-		targetList3.Add (new Target() {x = 5.00f, y = 3.00f, z = 0f, time = 1.0f});
-		targetList3.Add (new Target() {x = 3.75f, y = -4.12f, z = 0f, time = 154.0f});
-		targetList3.Add (new Target() {x = 4.41f, y = -3.63f, z = 0f, time = 784.0f});
 
 
-		trialList.Add (new Trial () { nTrial = 1, trialType = 4, trialTargets = targetList});
-		trialList.Add (new Trial () { nTrial = 2, trialType = 1, trialTargets = targetList2});
-		trialList.Add (new Trial () { nTrial = 3, trialType = 1, trialTargets = targetList3});
-		trialList.Add (new Trial () { nTrial = 4, trialType = 3, trialTargets = targetList3});
+		//trialList.Add (new Trial () { nTrial = 4, trialType = 3, trialTargets = targetList3});
 
-//		1,4,1203,441,1,607,419,154,911,155,784,896,705,867
-//		2,1,607,415,1,1206,475,231,NaN,NaN,776,NaN,NaN,869
-//		3,1,607,465,1,1206,425,203,NaN,NaN,836,NaN,NaN,827
-//		4,3,1258,423,1,658,468,194,NaN,NaN,733,NaN,NaN,711
+		// Resolution 1920 x 960
+		// Mid 960 480
+//		1,2,-7.50,-7,1,5.50,0,198,-1,-1.45,758,-7,6.50,794
+//		2,4,5.0,-6,1,-1.35,1,176,-4,-7.50,863,-1,7.50,835
+//		3,3,7.50,1,1,-5.50,-7,226,NaN,NaN,715,NaN,NaN,714
+//		4,2,-1.25,-7,1,5.50,0,225,-6,-1.45,762,-2,1.50,783
+//		5,2,-7.50,-7,1,5.50,0,204,-1,-9.50,817,-7,1.50,810
+//		6,1,-1.45,-2,1,7.50,-8,195,NaN,NaN,767,NaN,NaN,812
+//		7,1,-9.50,-2,1,7.50,-3,198,NaN,NaN,714,NaN,NaN,818
+//		8,2,-7.50,-2,1,5.50,-5,167,-1,-1.45,845,-2,1.50,880
+//		9,5,0,-6.50,1,-8,5.50,180,NaN,NaN,774,NaN,NaN,772
+//		10,3,2.50,-4,1,-1.05,-2,220,NaN,NaN,854,NaN,NaN,787
 
 	}
 

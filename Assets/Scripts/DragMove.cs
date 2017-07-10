@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using System.Linq;
 using System.Collections.Generic;
 using System;
+using System.IO;
 
 // Player Script
 
@@ -47,6 +48,9 @@ public class DragMove : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 	Vector3 _offsetToMouse;
 	float _zDistanceToCamera;
 
+	// For writing file
+	StreamWriter sw;
+
 
 	// Use this for initialization
 	void Start () {
@@ -54,6 +58,8 @@ public class DragMove : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 		count = 0;
 		SetCountText ();
 		listOfPossibleTargets.Add ("1_0");
+
+		sw = new StreamWriter("Assets/salida.txt");   //The file is created or Overwritten outside the Assests Folder.
 
 	}
 
@@ -79,6 +85,9 @@ public class DragMove : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 			new Vector3 (Input.mousePosition.x, Input.mousePosition.y, _zDistanceToCamera)
 		) + _offsetToMouse;
 
+		sw.WriteLine("Hola caracola "+currentTrial+" "+System.DateTime.Now, true);
+
+		sw.Flush();
 	}
 
 	public void OnEndDrag (PointerEventData eventData)

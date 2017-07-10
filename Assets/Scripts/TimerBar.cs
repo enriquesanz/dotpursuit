@@ -105,6 +105,10 @@ public class TimerBar : MonoBehaviour {
 
 					}
 
+					if (currentTargetNumber == 0) {
+						currentTargetNumber = 1;
+					}
+
 					fullTime = setUp.trialList [currentTrial - 1].trialTargets [currentTargetNumber -1].time;
 
 					startingTime = fullTime;
