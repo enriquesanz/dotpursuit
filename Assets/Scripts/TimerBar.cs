@@ -10,6 +10,7 @@ public class TimerBar : MonoBehaviour {
 	public Slider Timer;
 
 	public bool paused = false;
+	public bool playerEaten = false;
 
 	public int currentTrial;
 	public int currentTrialNumOfTargets;
@@ -45,7 +46,10 @@ public class TimerBar : MonoBehaviour {
 
 		currentTrialLastTarget = currentTrial.ToString () + "_" + (currentTrialNumOfTargets - 1).ToString();
 
+
+
 		if (paused == false) {
+			print ("Vamos por el " + currentTarget);
 			startingTime -= Time.deltaTime * 600;
 			Timer.value = startingTime;
 
@@ -57,7 +61,10 @@ public class TimerBar : MonoBehaviour {
 					player.GameOver ();
 				}
 
-				if (endingTrial == true) {
+				if (endingTrial == true || playerEaten == true) {
+					// Gestionar los objetivos del siguiente trial
+					setUp.manageItems (currentTrial);
+
 					print ("Destroy trial");
 					//DestroyFullTrial (currentTrialNumOfTargets, currentTrial);
 					for (int t = 0; t < (currentTrialNumOfTargets); t++) {
@@ -68,6 +75,7 @@ public class TimerBar : MonoBehaviour {
 					endingTrial = false;
 					//print ("Current Trial antes->" + currentTrial);
 					currentTrial = currentTrial + 1;
+
 					currentTargetNumber = 0;
 					currentTarget = currentTrial.ToString () + "_0";
 					currentTrialNumOfTargets = setUp.trialList [currentTrial - 1].trialTargets.Count;
@@ -86,28 +94,28 @@ public class TimerBar : MonoBehaviour {
 					}
 
 					// Check if currentTargete is the last of the trial
-					if (currentTarget == currentTrialLastTarget) {
-						endingTrial = true;
-					}
+//					if (currentTarget == currentTrialLastTarget) {
+//						endingTrial = true;
+//					}
 
 					if (lastRound == false) {
 						print ("Activando->" + currentTarget.ToString ());
 						GameObject.Find(currentTarget.ToString()).GetComponent<Renderer>().enabled = true;
 						player.listOfPossibleTargets.Add (currentTarget.ToString ());
 
+						if (currentTarget == currentTrialLastTarget) {
+							endingTrial = true;
+						}
+
 					}
 
 					if (currentTargetNumber == 0) {
 						paused = true;
-					} else {
-						currentTargetNumber = currentTargetNumber + 1;
-						currentTarget = currentTrial.ToString()+"_"+currentTargetNumber.ToString();
-
 					}
 
-					if (currentTargetNumber == 0) {
-						currentTargetNumber = 1;
-					}
+					currentTargetNumber = currentTargetNumber + 1;
+					currentTarget = currentTrial.ToString()+"_"+currentTargetNumber.ToString();
+
 
 					fullTime = setUp.trialList [currentTrial - 1].trialTargets [currentTargetNumber -1].time;
 
@@ -125,6 +133,8 @@ public class TimerBar : MonoBehaviour {
 			print ("Quitando" + currentTrial.ToString () + "_" + t);
 			Destroy (GameObject.Find (currentTrial.ToString() + "_" + t));
 		}
+
+
 
 //		endingTrial = false;
 //		//print ("Current Trial antes->" + currentTrial);

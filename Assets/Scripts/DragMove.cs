@@ -50,7 +50,7 @@ public class DragMove : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
 	// For writing file
 	StreamWriter sw;
-
+	private string filePath = Application.persistentDataPath + "/trialsResult.txt";
 
 	// Use this for initialization
 	void Start () {
@@ -59,7 +59,7 @@ public class DragMove : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 		SetCountText ();
 		listOfPossibleTargets.Add ("1_0");
 
-		sw = new StreamWriter("Assets/salida.txt");   //The file is created or Overwritten outside the Assests Folder.
+		sw = new StreamWriter(filePath);   //The file is created or Overwritten outside the Assests Folder.
 
 	}
 
@@ -101,9 +101,6 @@ public class DragMove : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
 		int pos = listOfPossibleTargets.IndexOf(currentTarget);
 		bool check = listOfPossibleTargets.Contains (currentTarget);
-		print ("currentTarget->" + coll.gameObject.name);
-		print ("Existe->" + check);
-		print ("Pos->" + pos);
 //		if (coll.gameObject.name == currentTarget)
 		if (listOfPossibleTargets.Contains (coll.gameObject.name) == true)
 		{
@@ -120,8 +117,8 @@ public class DragMove : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 			explosionAnimation.Find("ExpAnimator").Find("Fire").gameObject.GetComponent<Renderer>().sortingLayerName = "Item";
 
 			if (timebar.paused == false) {
+				setUp.manageItems (currentTrial);
 				timebar.DestroyFullTrial (currentTrialNumOfTargets, currentTrial);
-				currentTrial = currentTrial + 1;
 //				timebar.currentTargetNumber = 0;
 
 				timebar.endingTrial = false;
@@ -132,11 +129,11 @@ public class DragMove : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 				timebar.currentTrialNumOfTargets = setUp.trialList [currentTrial - 1].trialTargets.Count;
 				timebar.currentTrialLastTarget = timebar.currentTrial.ToString () + "_" + timebar.currentTrialNumOfTargets;
 				timebar.fullTime = setUp.trialList [currentTrial - 1].trialTargets [0].time;
-
+				currentTrial = timebar.currentTrial;
 			} else {
 				timebar.paused = false;
-				timebar.currentTargetNumber = timebar.currentTargetNumber + 1;
-				timebar.currentTarget = timebar.currentTrial.ToString()+"_"+timebar.currentTargetNumber.ToString();
+				//timebar.currentTargetNumber = timebar.currentTargetNumber + 1;
+				//timebar.currentTarget = timebar.currentTrial.ToString()+"_"+timebar.currentTargetNumber.ToString();
 			}	
 				
 			// Score
