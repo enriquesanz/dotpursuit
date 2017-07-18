@@ -6,6 +6,7 @@ using UnityEngine;
 public class CollisionStart : MonoBehaviour {
 
 	public GameObject timerBar;
+	public GameObject trialTimerBar;
 
 
 	// Use this for initialization
@@ -24,6 +25,7 @@ public class CollisionStart : MonoBehaviour {
 		Destroy (GameObject.Find ("FirstTarget"));
 
 		timerBar.SetActive(true);
+		trialTimerBar.SetActive (true);
 
 	}
 }

@@ -27,13 +27,17 @@ public class SetUpMain : MonoBehaviour {
 	// List of trials NEW
 	public List<Trial> trialList = new List<Trial>();
 
-	private Camera camera;
+	//private Camera camera;
 
 
 
 	// Use this for initialization
 	void Start () {
-		Screen.SetResolution (1920, 960, true);
+
+
+	}
+
+	public void beginStart (){
 		setUpList ();
 		numOfTargets = targetList.Count;
 		manageItems (0);
@@ -41,21 +45,20 @@ public class SetUpMain : MonoBehaviour {
 		player.currentTrial = nTrial;
 		player.currentTrialNumOfTargets = nTrialNumOfTargets;
 		player.lastTarget = lastTarget;
+		player.playerPaused = false;
 
 		timerBar.currentTarget = listOfTargets [0];
 		timerBar.currentTrial = nTrial;
 		timerBar.currentTrialNumOfTargets = nTrialNumOfTargets;
 		timerBar.lastTarget = lastTarget;
-		timerBar.lastTrial = lastTrial;
-
-		// Posicionar
-		//camera = GetComponent<Camera>();
-
+		timerBar.lastTrial = lastTrial;	
+	
+		Destroy (GameObject.Find ("Target"));
 	}
+
 	
 	// Update is called once per frame
 	void Update () {
-
 
 		if (player.gameOver == true && Input.GetMouseButtonDown(0))
 		{
@@ -65,13 +68,6 @@ public class SetUpMain : MonoBehaviour {
 
 	public void manageItems(int t)
 	{
-		Destroy (GameObject.Find ("Target"));
-
-		//Debug.Log ("Empezando");
-	
-		// Create all targets for all trials
-		//for (int t = 0; t < trialList.Count; t++) {
-
 			// Pintamos los targets de un determinado trial
 			for (int i = 0; i < trialList[t].trialTargets.Count; i++) {
 				//Instantiate (target, GeneratedPosition (), Target);
@@ -79,7 +75,8 @@ public class SetUpMain : MonoBehaviour {
 				myTargetInstance.transform.position = GeneratedPosition (t,i);
 				myTargetInstance.name = trialList [t].nTrial.ToString() + '_'+ i.ToString();
 				listOfTargets.Add (myTargetInstance.name);
-				myTargetInstance.GetComponent<Renderer>().enabled = false;
+				myTargetInstance.GetComponent<Renderer> ().enabled = false;
+							
 				totalTime = totalTime + trialList [t].trialTargets [i].time;
 
 			}

@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class TimerBar : MonoBehaviour {
 
+	public TrialTimerBar trialTimerBar;
+
 	public float fullTime;// = 150.0f;
 	public float startingTime;// = 150.0f; 
 	public Slider Timer;
@@ -25,14 +27,14 @@ public class TimerBar : MonoBehaviour {
 	private bool lastRound = false;
 	public bool endingTrial = false;
 
-	new AudioSource audio;
+	//new AudioSource audio;
 	public AudioClip failAudio;
 
 	public SetUpMain setUp;
 
 	// Use this for initialization
 	void Start () {
-		audio = GetComponent<AudioSource>();
+		//audio = GetComponent<AudioSource>();
 		Timer = GetComponent<Slider> ();
 		//currentTarget = 0;
 		fullTime = setUp.trialList[0].trialTargets[0].time;
@@ -46,10 +48,8 @@ public class TimerBar : MonoBehaviour {
 
 		currentTrialLastTarget = currentTrial.ToString () + "_" + (currentTrialNumOfTargets - 1).ToString();
 
-
-
 		if (paused == false) {
-			print ("Vamos por el " + currentTarget);
+			//print ("Vamos por el " + currentTarget);
 			startingTime -= Time.deltaTime * 600;
 			Timer.value = startingTime;
 
@@ -62,46 +62,59 @@ public class TimerBar : MonoBehaviour {
 				}
 
 				if (endingTrial == true || playerEaten == true) {
-					// Gestionar los objetivos del siguiente trial
-					setUp.manageItems (currentTrial);
+					if (trialTimerBar.trialCanStart == true) {
+						print ("Destroy trial");
+						//DestroyFullTrial (currentTrialNumOfTargets, currentTrial);
+						for (int t = 0; t < (currentTrialNumOfTargets); t++) {
+							print ("Quitando" + currentTrial.ToString () + "_" + t);
+							Destroy (GameObject.Find (currentTrial.ToString () + "_" + t));
+						}
 
-					print ("Destroy trial");
-					//DestroyFullTrial (currentTrialNumOfTargets, currentTrial);
-					for (int t = 0; t < (currentTrialNumOfTargets); t++) {
-						print ("Quitando" + currentTrial.ToString () + "_" + t);
-						Destroy (GameObject.Find (currentTrial.ToString() + "_" + t));
+						endingTrial = false;
+						setUp.manageItems (currentTrial);
+						currentTrial = currentTrial + 1;
+
+						currentTargetNumber = 0;
+						currentTarget = currentTrial.ToString () + "_0";
+						currentTrialNumOfTargets = setUp.trialList [currentTrial - 1].trialTargets.Count;
+						currentTrialLastTarget = currentTrial.ToString () + "_" + currentTrialNumOfTargets;
+						fullTime = setUp.trialList [currentTrial - 1].trialTargets [0].time;
+
+
+						//print ("Last trial->" + lastTrial);
+
+						if (currentTrial > lastTrial) {
+							lastRound = true;
+						}
+
+						trialTimerBar.trialCanStart = false;
+						trialTimerBar.startingTime = trialTimerBar.fullTime;
+						//trialTimerBar.timerActive = false;
+						
 					}
 
-					endingTrial = false;
-					//print ("Current Trial antes->" + currentTrial);
-					currentTrial = currentTrial + 1;
-
-					currentTargetNumber = 0;
-					currentTarget = currentTrial.ToString () + "_0";
-					currentTrialNumOfTargets = setUp.trialList [currentTrial - 1].trialTargets.Count;
-					currentTrialLastTarget = currentTrial.ToString () + "_" + currentTrialNumOfTargets;
-					fullTime = setUp.trialList [currentTrial - 1].trialTargets [0].time;
-
-					//print ("Last trial->" + lastTrial);
-
-					if (currentTrial > lastTrial) {
-						lastRound = true;
-					}
 
 				} else {
 					if (currentTrial > lastTrial) {
 						player.GameOver ();
 					}
 
-					// Check if currentTargete is the last of the trial
-//					if (currentTarget == currentTrialLastTarget) {
-//						endingTrial = true;
-//					}
 
 					if (lastRound == false) {
-						print ("Activando->" + currentTarget.ToString ());
-						GameObject.Find(currentTarget.ToString()).GetComponent<Renderer>().enabled = true;
-						player.listOfPossibleTargets.Add (currentTarget.ToString ());
+						//print ("Activando->" + currentTarget.ToString ());
+						if (currentTarget.ToString () == "1_0") {
+							GameObject.Find (currentTarget.ToString ()).GetComponent<Renderer> ().enabled = true;
+						}
+
+						if (currentTargetNumber == 0) {
+							if (trialTimerBar.trialCanStart == true) {
+								GameObject.Find (currentTarget.ToString ()).GetComponent<Renderer> ().enabled = true;
+							}
+						} else {
+							GameObject.Find (currentTarget.ToString ()).GetComponent<Renderer> ().enabled = true;
+						}
+
+						player.listOfPossibleTargets.Add (currentTarget.ToString ());	
 
 						if (currentTarget == currentTrialLastTarget) {
 							endingTrial = true;
@@ -111,6 +124,10 @@ public class TimerBar : MonoBehaviour {
 
 					if (currentTargetNumber == 0) {
 						paused = true;
+						trialTimerBar.startingTime = trialTimerBar.fullTime;
+						//trialTimerBar.timerActive = false;
+						//GameObject.Find (currentTrial.ToString ()+"_0").GetComponent<Renderer> ().enabled = true;
+
 					}
 
 					currentTargetNumber = currentTargetNumber + 1;
@@ -128,27 +145,22 @@ public class TimerBar : MonoBehaviour {
 
 	public void DestroyFullTrial(int currentTrialNumOfTargets, int currentTrial)
 	{
-		//print ("Destroying full" + currentTrialNumOfTargets + " " + currentTrial);
+		//DestroyFullTrial (currentTrialNumOfTargets, currentTrial);
 		for (int t = 0; t < (currentTrialNumOfTargets); t++) {
 			print ("Quitando" + currentTrial.ToString () + "_" + t);
 			Destroy (GameObject.Find (currentTrial.ToString() + "_" + t));
 		}
 
+		endingTrial = false;
+		//print ("Current Trial antes->" + currentTrial);
+		setUp.manageItems (currentTrial);
+		currentTrial = currentTrial + 1;
 
-
-//		endingTrial = false;
-//		//print ("Current Trial antes->" + currentTrial);
-//		this.currentTrial = currentTrial + 1;
-//		currentTargetNumber = 0;
-//		currentTarget = currentTrial.ToString () + "_0";
-//		currentTrialNumOfTargets = setUp.trialList [currentTrial - 1].trialTargets.Count;
-//		currentTrialLastTarget = currentTrial.ToString () + "_" + currentTrialNumOfTargets;
-//		fullTime = setUp.trialList [currentTrial - 1].trialTargets [0].time;
-//
-//		//print ("Last trial->" + lastTrial);
-//		if (currentTrial > lastTrial) {
-//			lastRound = true;
-//		}
+		currentTargetNumber = 0;
+		currentTarget = currentTrial.ToString () + "_0";
+		currentTrialNumOfTargets = setUp.trialList [currentTrial - 1].trialTargets.Count;
+		currentTrialLastTarget = currentTrial.ToString () + "_" + currentTrialNumOfTargets;
+		fullTime = setUp.trialList [currentTrial - 1].trialTargets [0].time;
 	}
 
 }

@@ -57,7 +57,7 @@
      <Compile Include="Assets\Scripts\JSONReader.cs" />
      <Compile Include="Assets\Scripts\SetUpMain.cs" />
      <Compile Include="Assets\Scripts\TimerBar.cs" />
-     <None Include="Assets\trialResult.txt" />
+     <Compile Include="Assets\Scripts\TrialTimerBar.cs" />
      <None Include="Assets\Standard Assets\ParticleSystems\Shaders\PriorityParticleAlpha.shader" />
      <None Include="Assets\salida.txt" />
      <None Include="Assets\Standard Assets\ParticleSystems\ParticleSystemsGuidelines.txt" />

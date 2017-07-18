@@ -21,6 +21,15 @@ public class DragMove : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 	private int count;
 	public Text countText;
 
+
+	//Lives
+	public int lives = 5;
+	public Text livesText;
+
+	// Player name
+	public GameObject playerName;
+	public string playerEnteredName;
+
 	// To timerBar
 	public int currentTrial;
 	public int currentTrialNumOfTargets;
@@ -41,6 +50,10 @@ public class DragMove : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 	public GameObject gameOverTextBottom;
 	public bool gameOver = false;
 
+	// Pause
+	public bool playerPaused = true;
+	public bool playerFirstRun = true;
+
 	// Drag
 	public static GameObject DraggedInstance;
 
@@ -50,7 +63,8 @@ public class DragMove : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
 	// For writing file
 	StreamWriter sw;
-	private string filePath = Application.persistentDataPath + "/trialsResult.txt";
+	private string filePath = Application.persistentDataPath + "/trialsResult_";
+	//private string filePath = "trialsResult_";
 
 	// Use this for initialization
 	void Start () {
@@ -59,8 +73,32 @@ public class DragMove : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 		SetCountText ();
 		listOfPossibleTargets.Add ("1_0");
 
-		sw = new StreamWriter(filePath);   //The file is created or Overwritten outside the Assests Folder.
+		livesText.text = "Vidas: " + lives;
 
+		//sw = new StreamWriter(filePath + "pepesapo" + ".txt");   //The file is created or Overwritten outside the Assests Folder.
+
+		//System.IO.File.WriteAllText("C:\blahblah_yourfilepath\yourtextfile.txt", "This is text that goes into the text file");
+
+
+	}
+
+	// Update is called once per frame
+	void Update () {
+		if (playerFirstRun == true && playerPaused == true && playerName.GetComponent<InputField>().text != "" && Input.GetMouseButtonDown(0))
+		{
+			playerFirstRun = false;
+			gameOverTextBottom.SetActive (false);
+			playerEnteredName = playerName.GetComponent<InputField>().text.ToString();
+
+			playerName.SetActive (false);
+			setUp.beginStart ();
+
+			sw = new StreamWriter(filePath + playerEnteredName + ".txt");   //The file is created or Overwritten outside the Assests Folder.
+			sw.WriteLine("#player: "+playerEnteredName, true);
+			sw.WriteLine("#trial: "+currentTrial, true);
+			sw.Flush();
+
+		}
 	}
 
 	// region Interface Implementations
@@ -85,27 +123,40 @@ public class DragMove : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 			new Vector3 (Input.mousePosition.x, Input.mousePosition.y, _zDistanceToCamera)
 		) + _offsetToMouse;
 
-		sw.WriteLine("Hola caracola "+currentTrial+" "+System.DateTime.Now, true);
+		if (playerPaused == false) {
+			TimerBar timebar = GameObject.Find ("TimerBar").GetComponent<TimerBar> ();
+			// Escribir a archivo
+			//sw = new StreamWriter(filePath + playerEnteredName + ".txt");   //The file is created or Overwritten outside the Assests Folder.
+			sw.WriteLine("currenTarget "+ timebar.currentTarget +"time "+Time.deltaTime + " pos x" + Input.mousePosition.x + " pos y" + Input.mousePosition.y, true);
+			sw.Flush();
+		}
 
-		sw.Flush();
 	}
 
 	public void OnEndDrag (PointerEventData eventData)
 	{
 		DraggedInstance = null;
 		_offsetToMouse = Vector3.zero;
-		print ("MAAAAAAL");
+
+		lives = lives - 1;
+
+		if (lives < 0) {
+			this.GameOver ();
+		} else {
+			livesText.text = "Vidas: " + lives;
+		}
 	}
 
 	void OnCollisionEnter2D(Collision2D coll) {
 
-		int pos = listOfPossibleTargets.IndexOf(currentTarget);
-		bool check = listOfPossibleTargets.Contains (currentTarget);
-//		if (coll.gameObject.name == currentTarget)
+		//int pos = listOfPossibleTargets.IndexOf(currentTarget);
+		//bool check = listOfPossibleTargets.Contains (currentTarget);
+
 		if (listOfPossibleTargets.Contains (coll.gameObject.name) == true)
 		{
 			//Collision target = GameObject.Find (coll.gameObject.name).GetComponent<Collision> ();
 			TimerBar timebar = GameObject.Find ("TimerBar").GetComponent<TimerBar> ();
+			TrialTimerBar trialTimerBar = GameObject.Find ("TrialTimerBar").GetComponent<TrialTimerBar>();
 			// Audio
 			audio.PlayOneShot(audioCollission);
 			DestroyObject (coll.gameObject);
@@ -117,9 +168,11 @@ public class DragMove : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 			explosionAnimation.Find("ExpAnimator").Find("Fire").gameObject.GetComponent<Renderer>().sortingLayerName = "Item";
 
 			if (timebar.paused == false) {
-				setUp.manageItems (currentTrial);
-				timebar.DestroyFullTrial (currentTrialNumOfTargets, currentTrial);
-//				timebar.currentTargetNumber = 0;
+				//setUp.manageItems (currentTrial + 1);
+				timebar.DestroyFullTrial (timebar.currentTrialNumOfTargets, timebar.currentTrial);
+
+				sw.WriteLine("player got "+ timebar.currentTarget +"time "+Time.deltaTime, true);
+				sw.Flush();
 
 				timebar.endingTrial = false;
 				//print ("Current Trial antes->" + currentTrial);
@@ -130,8 +183,19 @@ public class DragMove : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 				timebar.currentTrialLastTarget = timebar.currentTrial.ToString () + "_" + timebar.currentTrialNumOfTargets;
 				timebar.fullTime = setUp.trialList [currentTrial - 1].trialTargets [0].time;
 				currentTrial = timebar.currentTrial;
+
+				trialTimerBar.trialCanStart = false;
+				//trialTimerBar.startingTime = trialTimerBar.fullTime;
+				//trialTimerBar.timerActive = false;
+				sw.WriteLine("#player: "+playerEnteredName, true);
+				sw.WriteLine("#trial: "+currentTrial, true);
+				sw.Flush();
+
 			} else {
 				timebar.paused = false;
+				trialTimerBar.timerActive = true;
+				print (timebar.currentTargetNumber);
+				print (timebar.currentTarget);
 				//timebar.currentTargetNumber = timebar.currentTargetNumber + 1;
 				//timebar.currentTarget = timebar.currentTrial.ToString()+"_"+timebar.currentTargetNumber.ToString();
 			}	
@@ -153,6 +217,7 @@ public class DragMove : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 		gameOver = true;
 
 		Destroy (GameObject.Find ("TimerBar"));
+		Destroy (GameObject.Find ("TrialTimerBar"));
 		gameOverText.SetActive (true);
 		gameOverTextBottom.SetActive (true);
 	}
