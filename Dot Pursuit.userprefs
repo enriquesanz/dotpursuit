@@ -1,12 +1,12 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/DragMove.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/TimerBar.cs">
     <Files>
-      <File FileName="Assets/Scripts/DragMove.cs" Line="157" Column="39" />
+      <File FileName="Assets/Scripts/DragMove.cs" Line="187" Column="18" />
       <File FileName="Assets/Scripts/Collision.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/CollisionStart.cs" Line="27" Column="3" />
       <File FileName="Assets/Scripts/SetUpMain.cs" Line="72" Column="1" />
-      <File FileName="Assets/Scripts/TimerBar.cs" Line="129" Column="24" />
+      <File FileName="Assets/Scripts/TimerBar.cs" Line="92" Column="9" />
       <File FileName="Assets/Scripts/TrialTimerBar.cs" Line="30" Column="102" />
     </Files>
   </MonoDevelop.Ide.Workbench>
